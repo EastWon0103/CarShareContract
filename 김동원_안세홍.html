@@ -19,7 +19,7 @@
     <body>
         <div class="d-flex justify-content-between p-5">
             <div>
-                <a href="http://localhost:8080/carReservation?carId=firstcar"><img src="http://localhost:8080/image?name=socarLogo.png" style="height: 40px;"></a>
+                <a href="http://localhost:8080/carReservation?carId=firstcar"><img src="http://localhost:8080/image?name=carLogo.png" style="height: 80px;"></a>
             </div>
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
@@ -34,6 +34,14 @@
         </div>
         <div style="text-align: center"><div id="player"></div></div>
         <div class="p-5">
+            <div class="d-flex justify-content-end p-3">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="자동차를 주소를 등록해주세요!" aria-label="Recipient's username" aria-describedby="carRegistrationBtn" id="carAddress">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" id="carRegistrationBtn">등록하기</button>
+                    </div>
+                </div>
+            </div>
             <div class="list-group">
                 <div class="list-group-item list-group-item-action">
                     <div class="row no-gutters">
@@ -48,6 +56,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="list-group-item list-group-item-action">
                     <div class="row no-gutters">
                         <div class="col-md-4">
@@ -104,5 +113,12 @@
         </div>
 
     </body>
-
+    <script>
+        const carRegistrationBtn = document.querySelector("#carRegistrationBtn")
+        carRegistrationBtn.addEventListener('click',() => {
+            const carAddress = document.querySelector("#carAddress")
+            console.log(carAddress.value)
+            // 리셋하려면 이거 쓰세요. carAddress.value = ""
+        })
+    </script>
 </html>
