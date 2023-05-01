@@ -45,6 +45,19 @@ http.createServer((req,res) => {
             return;
         });
 
+    } else if ("/carReservation" === parsing.pathname) {
+        console.log(parsing.pathname);
+        fs.readFile("carReservation.html", (err,data) => {
+            if(err){
+                errorPage(res,500);
+                return;
+            };
+            res.writeHead(200, {"Content-Type": "text/html"});
+            res.write(data);
+            res.end();
+            return;
+        });
+
     } else {
         errorPage(res, 404);
         return;
