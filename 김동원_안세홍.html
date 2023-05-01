@@ -16,127 +16,352 @@
                 });
             }
         </script>
-        <scirpt src='web3.min.js'></scirpt>
-        <script type="text/javascript">
+        <script src='web3.min.js'></script>
+        <script type="text/javascript">      
+            let contractRegister;      
             window.addEventListener('load', async () => {
                 if (window.ethereum) {
                     console.log('Modern dapp browsers');
                     window.web3 = new Web3(window.ethereum);
-                    loadAddEvent();
+                    
                 } else if (window.web3) {
                     console.log('Legacy dapp browsers');
                 } else {
                     console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
                 }
+
+                // 로그인 버튼 
+                const loginBtn = document.querySelector('#loginBtn');
+                
+                //Car Reservation 등록
+                const registerAbi = [
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "address",
+                                "name": "_addr",
+                                "type": "address"
+                            }
+                        ],
+                        "name": "enrollContract",
+                        "outputs": [],
+                        "stateMutability": "nonpayable",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [],
+                        "stateMutability": "nonpayable",
+                        "type": "constructor"
+                    },
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "uint256",
+                                "name": "num",
+                                "type": "uint256"
+                            }
+                        ],
+                        "name": "getContractAddr",
+                        "outputs": [
+                            {
+                                "internalType": "address",
+                                "name": "",
+                                "type": "address"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [],
+                        "name": "getLength",
+                        "outputs": [
+                            {
+                                "internalType": "uint256",
+                                "name": "",
+                                "type": "uint256"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    }
+                ];
+                // 아래의 어드레스를 배포환경에 따라 바꿔주세요
+                const contractRegisterAddr = "0x695bF012E1802790bFD48f3d92e131BC429C7B4d";
+                contractRegister = await new window.web3.eth.Contract(registerAbi, contractRegisterAddr);
+                const registerBtn = document.querySelector('#contractRegistrationBtn');
+
+                const contractLength = await contractRegister.methods.getLength().call();
+                console.log(contractLength);
+                for(let i=contractLength-1;i>=0;i--) {
+                    const carShareAddr = await contractRegister.methods.getContractAddr(i).call();
+                    addCarHtmlItem(carShareAddr);
+                }
+
+                loginBtn.addEventListener('click', loginFunc);
+                registerBtn.addEventListener('click', registerBtnClick);
             });
+            const currentBalance = async () => {
+                const balanceLine = document.querySelector("#balance");
+                const balance = await window.web3.eth.getBalance(accounts[0]);
+                balanceLine.textContent = balance;
+            }
+            const addCarHtmlItem = async (contractAddr) => {
+                const carShareABI = [
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "string",
+                                "name": "_picture",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "_carModel",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "_carNumber",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "_price",
+                                "type": "uint256"
+                            }
+                        ],
+                        "stateMutability": "nonpayable",
+                        "type": "constructor"
+                    },
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "uint256",
+                                "name": "_startTime",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "_endTime",
+                                "type": "uint256"
+                            }
+                        ],
+                        "name": "userReservation",
+                        "outputs": [],
+                        "stateMutability": "payable",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "uint256",
+                                "name": "_startTime",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "_endTime",
+                                "type": "uint256"
+                            }
+                        ],
+                        "name": "canReservation",
+                        "outputs": [
+                            {
+                                "internalType": "bool",
+                                "name": "",
+                                "type": "bool"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [],
+                        "name": "getCarInfo",
+                        "outputs": [
+                            {
+                                "internalType": "string",
+                                "name": "",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "string",
+                                "name": "",
+                                "type": "string"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "",
+                                "type": "uint256"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "uint256",
+                                "name": "num",
+                                "type": "uint256"
+                            }
+                        ],
+                        "name": "getReservationInfo",
+                        "outputs": [
+                            {
+                                "internalType": "address",
+                                "name": "",
+                                "type": "address"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "",
+                                "type": "uint256"
+                            },
+                            {
+                                "internalType": "uint256",
+                                "name": "",
+                                "type": "uint256"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [
+                            {
+                                "internalType": "address",
+                                "name": "_user",
+                                "type": "address"
+                            }
+                        ],
+                        "name": "getReservationNumber",
+                        "outputs": [
+                            {
+                                "internalType": "uint256[]",
+                                "name": "",
+                                "type": "uint256[]"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    },
+                    {
+                        "inputs": [],
+                        "name": "isRentOwner",
+                        "outputs": [
+                            {
+                                "internalType": "bool",
+                                "name": "",
+                                "type": "bool"
+                            }
+                        ],
+                        "stateMutability": "view",
+                        "type": "function"
+                    }
+                ]
+                const carShareContract = await new window.web3.eth.Contract(carShareABI, contractAddr);
+                const req = await carShareContract.methods.getCarInfo().call();
+                // req는 값이 여러개임 
+                // req[0]: picture
+                // req[1]: carModel
+                // req[2]: carNumber
+                // req[3]: price
+                const newItem = document.createElement("div");
+                const newUrl = `http://localhost:8545/carReservation.html?address=${contractAddr}`;
+                newItem.setAttribute('class', 'list-group-item list-group-item-action');
+                newItem.setAttribute('onClick', `location.href="${newUrl}" `);
+                newItem.innerHTML = `
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img style="max-width: 100%; height: auto" src=${req[0]}>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">${req[1]}</h5>
+                                <p class="card-text">차량 번호 : ${req[2]}<br>가격 : ${req[3]}(시간당)</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                const contractList = document.querySelector("#contractList");
+                contractList.appendChild(newItem);
+            }
 
-            // const loginBtn = document.querySelector('#loginBtn');
-            // const loginFunc = async () => {
-            //     window.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-            //     const address = document.querySelector("#address")
-            //     address.textContent = `계정주소 : ${accounts[0]}`
-            //     const remainMoney = document.querySelector("#remainMoney")
-            //     remainMoney.textContent = "잔고 : 100"
-            // }
+            const loginFunc = async () => {
+                const addressLine = document.querySelector("#address");
+                const balanceLine = document.querySelector("#balance");
 
-            // const loadAddEvent = async () => {
-            //     loginBtn.addEventListener('click', loginFunc);
-            // }
+                window.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                addressLine.textContent = accounts[0];
+
+                const balance = await window.web3.eth.getBalance(accounts[0]);
+                balanceLine.textContent = balance;
+            }
+
+            const registerBtnClick = async () => {
+                const addressLine = document.querySelector("#address");
+                const registerAddrInput = document.querySelector('#contractAddressInput');
+
+                if(addressLine.innerText == '연결안됨') {
+                    alert("Metamask와 연결하세요");
+                    return;
+                }
+                if(!registerAddrInput.value) {
+                    alert("등록할 CarShare Contract의 어드레스를 써주세요");
+                    return;
+                } 
+                try {
+                    contractRegister.methods.enrollContract(registerAddrInput.value).send({from: accounts[0]}).then(()=>{
+                        alert("등록 성공!");
+                        currentBalance();
+                        addCarHtmlItem(registerAddrInput.value);
+                    });
+                } catch(err) {
+                    alert("에러 발생");
+                }
+            };
         </script>
     </head>
     <body>
         <div class="d-flex justify-content-between p-5">
             <div>
-                <a href="http://localhost:8080/carReservation.html"><img src="http://localhost:8080/image/carLogo.png" style="height: 80px;"></a>
+                <a href="http://localhost:8545/carReservation.html"><img src="http://localhost:8545/image/carLogo.png" style="height: 80px;"></a>
             </div>
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <!--            <h6 class="card-subtitle mb-2 text-muted">잔고 : 연결안됨</h6>-->
-                    <div class="card-text">
-                        <div id="address">계정주소 : 연결안됨</div>
-                        <div id="remainMoney">잔고 : 연결안됨</div>
+            <div>
+                <div class="card" style="width: 35rem;">
+                    <div class="card-body">
+                        <div class="card-text">
+                            <div><p>계정주소 : <b id="address">연결안됨</b></p></div>
+                            <div><p>잔고 : <b id="balance">연결안됨</b></p></div>
+                        </div>
                     </div>
                 </div>
+                <div align="right", style="margin-top: 0.5rem;">
+                    <button id="loginBtn" type="button" class="btn btn-primary btn-lg">Metamask Refresh</button>
+                </div>
             </div>
-            <button id="loginBtn" type="button" class="btn btn-primary btn-lg">메타마스크 연결</button>
         </div>
         <div style="text-align: center"><div id="player"></div></div>
+        <h4 style="text-align: center">소개영상</h4>
         <div class="p-5">
             <div class="d-flex justify-content-end p-3">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="자동차를 주소를 등록해주세요!" aria-label="Recipient's username" aria-describedby="carRegistrationBtn" id="carAddress">
+                    <input type="text" class="form-control" placeholder="CarShare Contract의 어드레스를 등록해주세요!" aria-label="Recipient's username" aria-describedby="carRegistrationBtn" id="contractAddressInput">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-secondary" type="button" id="carRegistrationBtn">등록하기</button>
+                        <button class="btn btn-outline-secondary" type="button" id="contractRegistrationBtn">등록하기</button>
                     </div>
                 </div>
             </div>
-            <div class="list-group">
-                <div class="list-group-item list-group-item-action">
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image/car.png">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">더 뉴 팰리세이드</h5>
-                                <p class="card-text">차량 번호 : 12가 3456<br>가격 : 1(시간당)</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="list-group" id="contractList">
 
-                <div class="list-group-item list-group-item-action">
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image/car.png">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">더 뉴 팰리세이드</h5>
-                                <p class="card-text">차량 번호 : 12가 3456<br>가격 : 1(시간당)</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item list-group-item-action">
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image/car.png">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">더 뉴 팰리세이드</h5>
-                                <p class="card-text">차량 번호 : 12가 3456<br>가격 : 1(시간당)</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item list-group-item-action">
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image/car.png">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">더 뉴 팰리세이드</h5>
-                                <p class="card-text">차량 번호 : 12가 3456<br>가격 : 1(시간당)</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="list-group-item list-group-item-action">
-                    <div class="row no-gutters">
-                        <div class="col-md-4">
-                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image/car.png">
-                        </div>
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title">더 뉴 팰리세이드</h5>
-                                <p class="card-text">차량 번호 : 12가 3456<br>가격 : 1(시간당)</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 

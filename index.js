@@ -34,9 +34,14 @@ async function gateWayPage(req, res) {
                     return;
             }
             res.writeHead(200, {'Content-Type': 'text/html'});
+            if(url.parse(req.url, true).query.address) {
+                const htmlString = data.toString().replace('{{contractAddr}}', url.parse(req.url, true).query.address);
+                res.write(htmlString);
+                return res.end();
+            }
             res.write(data);
             return res.end();
     });
 }
 
-http.createServer(gateWayPage).listen(8080);
+http.createServer(gateWayPage).listen(8545);
