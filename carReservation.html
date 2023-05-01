@@ -94,7 +94,7 @@
         </div>
         <div id="calculator" class="alert alert-dark mt-5" role="alert">가격</div>
         <div class="d-flex justify-content-end">
-            <button type="button" class="btn btn-primary btn-lg" disabled>대여시작 버튼</button>
+            <button type="button" id="rentalStart" class="btn btn-primary btn-lg" disabled>대여시작 버튼</button>
         </div>
 
     </div>
@@ -127,6 +127,8 @@
         // 대여 시작일을 변경해주면 대여 반납일 및 시간을 리셋
         endDate.value = ""
         endTime.value = ""
+        const rentalStart = document.querySelector("#rentalStart")
+        rentalStart.disabled = true
     });
 
 
@@ -144,6 +146,8 @@
         if(startTime.value < 0) startTime.value = 0
         if(startTime.value > 23) startTime.value = 23
         endTime.value = ""
+        const rentalStart = document.querySelector("#rentalStart")
+        rentalStart.disabled = true
     });
 
     const endTime = document.querySelector("#endTime");
@@ -152,18 +156,22 @@
             const text = `${endTime.value}`.substring(0,2)
             endTime.value = text
         }
+        const rentalStart = document.querySelector("#rentalStart")
+        rentalStart.disabled = true
         if(endTime.value < 0) endTime.value = 0
         if(endTime.value > 23) endTime.value = 23
         const calculator = document.querySelector("#calculator")
         if(endTime.value === '') return calculator.textContent = '가격'
-        if(startDate.value === endDate.value) {
-            if(`${endTime.value}`.length === 2) if(startTime.value > endTime.value) endTime.value = startTime.value
-        }
         // todo : 해당 시간에 사용 가능한지 여부 여기서 체크하면됩니다.
         const result = timeCalculator(startDate.value,startTime.value,endDate.value,endTime.value)
-        if(startDate.value !== "" && startTime.value !== "" && endDate.value !== "") calculator.textContent = `가격 : 1 x ${result.durationInHours}시간 = ${result.durationInHours}`
-        console.log(`unixStartTime : ${result.unixStartTime}`)
-        console.log(`unixEndTime : ${result.unixEndTime}`)
+        if(result.durationInHours < 0) return calculator.textContent = "시작일보다 반납일이 빠릅니다."
+
+        if(startDate.value !== "" && startTime.value !== "" && endDate.value !== "") {
+            calculator.textContent = `가격 : 1 x ${result.durationInHours}시간 = ${result.durationInHours}`
+            rentalStart.disabled = false
+            console.log(`unixStartTime : ${result.unixStartTime}`)
+            console.log(`unixEndTime : ${result.unixEndTime}`)
+        }
 
     });
 </script>
