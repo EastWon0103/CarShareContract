@@ -1,0 +1,118 @@
+<html>
+<head>
+    <title>carProject</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+<body>
+<div class="d-flex justify-content-between p-5">
+    <div>
+        <img src="/image/socarLogo.png" style="height: 40px;">
+    </div>
+    <div>
+        이름 : 홍길동<br>
+        잔고 : 100만원
+    </div>
+</div>
+<div class="d-flex justify-content-between p-5">
+    <div class="text-center">
+        <div class="card" style="width: 18rem;">
+            <img src="/image/car.png" class="card-img-top p-3" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">더 뉴 팰리세이드</h5>
+                <p class="card-text">차량 번호 : 12가 3456<br>가격 : 20000원(시간당)</p>
+            </div>
+        </div>
+    </div>
+    <div class="ml-5" style="text-align: center">
+        <div class="d-flex justify-content-between text-center">
+            <div class="pr-5">
+                <!--                        <div>대여 시작일</div>-->
+                <!--                        <input type="date" id="startDate"><br>-->
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default-1">대여 시작일</span>
+                    </div>
+                    <input type="date" id="startDate" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default-1">
+                </div>
+                <div class="input-group input-group-default">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default-2">시간(0-23)</span>
+                    </div>
+                    <input type="number" maxlength="2" id="startTime" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default-2">
+                </div>
+            </div>
+            <div>
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default-3">대여 반납일</span>
+                    </div>
+                    <input type="date" id="endDate" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default-3">
+                </div>
+                <div class="input-group input-group-default">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-default-4">시간(0-23)</span>
+                    </div>
+                    <input type="number" maxlength="2" id="endTime" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default-4">
+                </div>
+            </div>
+        </div>
+        <div class="alert alert-dark mt-5" role="alert">
+            2만원 X 24시간 = 48만원
+        </div>
+        <div class="d-flex justify-content-between">
+            <button type="button" class="btn btn-primary btn-lg" disabled>유효검사 버튼</button><br>
+            <button type="button" class="btn btn-primary btn-lg" disabled>대여시작 버튼</button>
+        </div>
+
+    </div>
+</div>
+<script>
+    const startDate = document.querySelector("#startDate");
+    const today = new Date();
+    const minDate = new Date(today.getFullYear(), today.getMonth(), today.getDate()+1);
+    const endDate = document.querySelector("#endDate");
+
+    startDate.min = minDate.toISOString().slice(0, 10); // 오늘 부터 예약 가능하기 때문에 최소 날짜 조정
+    endDate.min = minDate.toISOString().slice(0, 10); // 오늘 부터 예약 가능하기 때문에 최소 날짜 조정
+    startDate.addEventListener("input", () => {
+        const startDateList = startDate.value.split('-')
+        const endMinDate = new Date(parseInt(startDateList[0]), parseInt(startDateList[1])-1, parseInt(startDateList[2])+1);
+        endDate.min = endMinDate.toISOString().slice(0, 10);
+        // 대여 시작일을 변경해주면 대여 반납일 및 시간을 리셋
+        endDate.value = ""
+        endTime.value = ""
+    });
+
+
+    endDate.addEventListener("input", () => {
+        console.log(endDate.value);
+    });
+
+    const startTime = document.querySelector("#startTime");
+    startTime.addEventListener("input", () => {
+        if(`${startTime.value}`.length > 2) {
+            const text = `${startTime.value}`.substring(0,2)
+            startTime.value = text
+        }
+        if(startTime.value < 0) startTime.value = 0
+        if(startTime.value > 23) startTime.value = 23
+        endTime.value = ""
+    });
+
+    const endTime = document.querySelector("#endTime");
+    endTime.addEventListener("input", () => {
+        if(`${endTime.value}`.length > 2) {
+            const text = `${endTime.value}`.substring(0,2)
+            endTime.value = text
+        }
+        if(endTime.value < 0) endTime.value = 0
+        if(endTime.value > 23) endTime.value = 23
+        if(startDate.value === endDate.value) {
+            if(`${endTime.value}`.length === 2) if(startTime.value > endTime.value) endTime.value = startTime.value
+        }
+
+    });
+</script>
+</body>
+</html>
