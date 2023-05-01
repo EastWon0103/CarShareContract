@@ -15,42 +15,6 @@
                     videoId: '72nMc4jEmbE',
                 });
             }
-            // 자동차 리스트 생성
-            const carsList = [
-                {carName: "더 뉴 펠리세이드1", carNum: "12가 3456", price: 1, carImage:"http://localhost:8080/image?name=car.png"},
-                {carName: "더 뉴 펠리세이드2", carNum: "12가 3456", price: 2, carImage:"http://localhost:8080/image?name=car.png"},
-                {carName: "더 뉴 펠리세이드3", carNum: "12가 3456", price: 3, carImage:"http://localhost:8080/image?name=car.png"}
-            ];
-
-            // 자동차 리스트를 HTML로 변환하여 보여주는 함수
-            function displayCarsList(carsList) {
-                // 리스트를 담을 HTML 요소를 가져옴
-                const listElement = document.getElementById('carList');
-
-                // 리스트를 순회하면서 각 항목을 HTML 요소로 변환하여 추가
-                carsList.forEach(car => {
-                    const listItem = document.createElement('span');
-                    listItem.innerHTML = `
-                        <a href="http://localhost:8080/carReservation?carId=${car.carName}" class="list-group-item list-group-item-action">
-                          <div class="row no-gutters">
-                            <div class="col-md-4">
-                              <img style="max-width: 100%; height: auto" src="${car.carImage}">
-                            </div>
-                            <div class="col-md-8">
-                              <div class="card-body">
-                                <h5 class="card-title">${car.carName}</h5>
-                                <p class="card-text">차량 번호 : ${car.carNum}<br>가격 : ${car.price}(시간당)</p>
-                              </div>
-                            </div>
-                          </div>
-                        </a>`;
-                    listElement.appendChild(listItem);
-                });
-            }
-            // 페이지 로드 시 자동차 리스트를 보여줌
-            window.onload = function() {
-                displayCarsList(carsList);
-            };
         </script>
         <script src='web3.min.js'></script>
         <script type="text/javascript">      
@@ -396,9 +360,7 @@
                     </div>
                 </div>
             </div>
-            <div class="list-group" id="contractList">
-
-            </div>
+            <div class="list-group" id="contractList"></div>
         </div>
     </body>
 </html>
