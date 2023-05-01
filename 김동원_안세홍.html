@@ -9,7 +9,9 @@
     <div>
         <img src="./image/socarLogo.png" style="height: 40px;">
     </div>
+
     <div>
+        <a href="myPage.html">새로운 페이지로 이동</a>
         이름 : 홍길동<br>
         잔고 : 100만원
     </div>
@@ -121,6 +123,7 @@
         if(startDate.value === endDate.value) {
             if(`${endTime.value}`.length === 2) if(startTime.value > endTime.value) endTime.value = startTime.value
         }
+        // todo : 해당 시간에 사용 가능한지 여부 여기서 체크하면됩니다.
         calculator.textContent = `가격 : 2만원 x ${timeCalculator(startDate.value,startTime.value,endDate.value,endTime.value)}시간 = ${timeCalculator(startDate.value,startTime.value,endDate.value,endTime.value)*2}만원`
     });
 </script>
