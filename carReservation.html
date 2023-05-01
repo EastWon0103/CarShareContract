@@ -107,7 +107,11 @@
         eDate.setHours(_endTime)
         const durationInMs = eDate - sDate;
         const durationInHours = durationInMs / (1000 * 60 * 60);
-        return durationInHours
+        return {
+            unixStartTime : sDate.getTime(),
+            unixEndTime : eDate.getTime(),
+            durationInHours : durationInHours
+        }
     }
     const startDate = document.querySelector("#startDate");
     const today = new Date();
@@ -156,7 +160,11 @@
             if(`${endTime.value}`.length === 2) if(startTime.value > endTime.value) endTime.value = startTime.value
         }
         // todo : 해당 시간에 사용 가능한지 여부 여기서 체크하면됩니다.
-        if(startDate.value !== "" && startTime.value !== "" && endDate.value !== "") calculator.textContent = `가격 : 1 x ${timeCalculator(startDate.value,startTime.value,endDate.value,endTime.value)}시간 = ${timeCalculator(startDate.value,startTime.value,endDate.value,endTime.value)}`
+        const result = timeCalculator(startDate.value,startTime.value,endDate.value,endTime.value)
+        if(startDate.value !== "" && startTime.value !== "" && endDate.value !== "") calculator.textContent = `가격 : 1 x ${result.durationInHours}시간 = ${result.durationInHours}`
+        console.log(`unixStartTime : ${result.unixStartTime}`)
+        console.log(`unixEndTime : ${result.unixEndTime}`)
+
     });
 </script>
 </body>
