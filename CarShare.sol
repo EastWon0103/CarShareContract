@@ -8,6 +8,7 @@ contract CarShare {
     }
 
     address payable carOwner;
+    string picture;
     string carModel;
     string carNumber;
     uint price;
@@ -15,14 +16,39 @@ contract CarShare {
     uint numCustomers;
     mapping (uint => Customer) customers;
 
-    constructor(string memory _carModel, string memory _carNumber, uint _price) {
+    constructor(string memory _picture, string memory _carModel, string memory _carNumber, uint _price) {
         carOwner = payable(msg.sender);
+        picture = _picture;
         carModel = _carModel;
         carNumber = _carNumber;
         price = _price;
         numCustomers = 0;
     }
 
+    modifier onlyOwner() {
+        require(carOwner == msg.sender);
+        _;
+    }
+
+    function getCarInfo() view public returns(string memory, string memory, string memory, uint) {
+        return (picture, carModel, carNumber, price);
+    }
+
+    function getReservationNumber(address _user) view public returns (uint[] memory) {
+        uint[] memory result = new uint[](numCustomers);
+        uint count = 0;
+        for(uint i=0;i<numCustomers;i++) {
+            if(customers[i].addr == _user) {
+                result[count++] = i;
+            }
+        }
+        
+        return result;
+    }
+
+    function getReservationInfo(uint num) view public returns (address, uint, uint) {
+        return (customers[num].addr, customers[num].startTime, customers[num].endTime);
+    }
 
     // 실행한 사람이 렌트 오너인지 아닌지
     function isRentOwner() view public returns(bool){
@@ -31,7 +57,7 @@ contract CarShare {
                 return true;
             }
         }
-        
+     
         return false;
     }
 
@@ -50,7 +76,7 @@ contract CarShare {
     }
 
     // 예약하기
-    function userReservation(uint _startTime, uint _endTime) public {
+    function userReservation(uint _startTime, uint _endTime) public payable{
         // 스타트타임이 먼저인지
         if(_startTime > _endTime) {
             revert();
@@ -66,10 +92,21 @@ contract CarShare {
             revert();
         }
 
+        // 3600 = 1hour
+        uint totalPrice = ((_endTime-_startTime)/3600) * price;
+        if(totalPrice != msg.value) {
+            revert();
+        }
+
+        if(msg.value > msg.sender.balance) {
+            revert();
+        }
+
         Customer storage cus = customers[numCustomers++];
         cus.addr = payable(msg.sender);
         cus.startTime = _startTime;
         cus.endTime = _endTime;
+
+        carOwner.transfer(msg.value);
     }
-    
 }
