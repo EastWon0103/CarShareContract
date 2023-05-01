@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>carProject</title>
+        <title>CarProject</title>
         <meta charset="utf-8"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
         <script src="https://www.youtube.com/iframe_api"></script>
@@ -16,11 +16,38 @@
                 });
             }
         </script>
+        <scirpt src='web3.min.js'></scirpt>
+        <script type="text/javascript">
+            window.addEventListener('load', async () => {
+                if (window.ethereum) {
+                    console.log('Modern dapp browsers');
+                    window.web3 = new Web3(window.ethereum);
+                    loadAddEvent();
+                } else if (window.web3) {
+                    console.log('Legacy dapp browsers');
+                } else {
+                    console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
+                }
+            });
+
+            // const loginBtn = document.querySelector('#loginBtn');
+            // const loginFunc = async () => {
+            //     window.accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+            //     const address = document.querySelector("#address")
+            //     address.textContent = `계정주소 : ${accounts[0]}`
+            //     const remainMoney = document.querySelector("#remainMoney")
+            //     remainMoney.textContent = "잔고 : 100"
+            // }
+
+            // const loadAddEvent = async () => {
+            //     loginBtn.addEventListener('click', loginFunc);
+            // }
+        </script>
     </head>
     <body>
         <div class="d-flex justify-content-between p-5">
             <div>
-                <a href="http://localhost:8080/carReservation?carId=firstcar"><img src="http://localhost:8080/image?name=carLogo.png" style="height: 80px;"></a>
+                <a href="http://localhost:8080/carReservation.html"><img src="http://localhost:8080/image/carLogo.png" style="height: 80px;"></a>
             </div>
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
@@ -47,7 +74,7 @@
                 <div class="list-group-item list-group-item-action">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image?name=car.png">
+                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image/car.png">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -61,7 +88,7 @@
                 <div class="list-group-item list-group-item-action">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image?name=car.png">
+                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image/car.png">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -74,7 +101,7 @@
                 <div class="list-group-item list-group-item-action">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image?name=car.png">
+                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image/car.png">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -87,7 +114,7 @@
                 <div class="list-group-item list-group-item-action">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image?name=car.png">
+                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image/car.png">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
@@ -100,7 +127,7 @@
                 <div class="list-group-item list-group-item-action">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image?name=car.png">
+                            <img style="max-width: 100%; height: auto" src="http://localhost:8080/image/car.png">
                         </div>
                         <div class="col-md-8">
                             <div class="card-body">
