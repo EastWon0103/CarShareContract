@@ -16,6 +16,8 @@ contract CarShare {
     uint numCustomers;
     mapping (uint => Customer) customers;
 
+    event Logging(string);
+
     constructor(string memory _picture, string memory _carModel, string memory _carNumber, uint _price) {
         carOwner = payable(msg.sender);
         picture = _picture;
@@ -34,22 +36,6 @@ contract CarShare {
         return (picture, carModel, carNumber, price);
     }
 
-    function getReservationNumber(address _user) view public returns (uint[] memory) {
-        uint[] memory result = new uint[](numCustomers);
-        uint count = 0;
-        for(uint i=0;i<numCustomers;i++) {
-            if(customers[i].addr == _user) {
-                result[count++] = i;
-            }
-        }
-        
-        return result;
-    }
-
-    function getReservationInfo(uint num) view public returns (address, uint, uint) {
-        return (customers[num].addr, customers[num].startTime, customers[num].endTime);
-    }
-
     // 실행한 사람이 렌트 오너인지 아닌지
     function isRentOwner() view public returns(bool){
         for(uint i=0;i<numCustomers;i++) {
@@ -62,7 +48,12 @@ contract CarShare {
     }
 
     // reservation이 가능한지 확인 -> 가능하면 true,아니면 false
-    function canReservation(uint _startTime, uint _endTime) view public returns (bool){
+    function canReservation(uint _startTime, uint _endTime) public view returns (bool){
+        // 스타트타임이 먼저인지
+        if(_startTime > _endTime) {
+            return false;
+        }
+
         for(uint i=0;i<numCustomers;i++) {
             if(customers[i].startTime < _startTime &&  _startTime< customers[i].endTime) {
                 return false;
@@ -76,31 +67,14 @@ contract CarShare {
     }
 
     // 예약하기
-    function userReservation(uint _startTime, uint _endTime) public payable{
-        // 스타트타임이 먼저인지
-        if(_startTime > _endTime) {
-            revert();
-        }
-
-        // 예약날짜가 현재 시간보다 과거에 있는지
-        if(block.timestamp > _startTime) {
-            revert();
-        }
-        
+    function userReservation(uint _startTime, uint _endTime) public payable {        
         // 스케쥴이 가능한지
-        if(!canReservation(_startTime, _endTime)) {
-            revert();
-        }
-
+        require(canReservation(_startTime, _endTime), "Can't Reservation"); 
         // 3600 = 1hour
         uint totalPrice = ((_endTime-_startTime)/3600) * price;
-        if(totalPrice != msg.value) {
-            revert();
-        }
+        require(totalPrice == msg.value, "Send Value Doesn't match");
 
-        if(msg.value > msg.sender.balance) {
-            revert();
-        }
+        require(msg.value < msg.sender.balance, "Blanace lack");
 
         Customer storage cus = customers[numCustomers++];
         cus.addr = payable(msg.sender);

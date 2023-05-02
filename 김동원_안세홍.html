@@ -12,7 +12,7 @@
                     height: '360',
                     width: '640',
                     // todo : 아래 유튜브Id만 바꿔주면 됩니다.
-                    videoId: '72nMc4jEmbE',
+                    videoId: 'NXCRgVIgo6M',
                 });
             }
         </script>
@@ -87,7 +87,7 @@
                     }
                 ];
                 // 아래의 어드레스를 배포환경에 따라 바꿔주세요
-                const contractRegisterAddr = "0x695bF012E1802790bFD48f3d92e131BC429C7B4d";
+                const contractRegisterAddr = "0x4A783fAa4D3d464E5476C9501AD058E1A6b32BF5";
                 contractRegister = await new window.web3.eth.Contract(registerAbi, contractRegisterAddr);
                 const registerBtn = document.querySelector('#contractRegistrationBtn');
 
@@ -133,6 +133,19 @@
                         ],
                         "stateMutability": "nonpayable",
                         "type": "constructor"
+                    },
+                    {
+                        "anonymous": false,
+                        "inputs": [
+                            {
+                                "indexed": false,
+                                "internalType": "string",
+                                "name": "",
+                                "type": "string"
+                            }
+                        ],
+                        "name": "Logging",
+                        "type": "event"
                     },
                     {
                         "inputs": [
@@ -205,54 +218,6 @@
                         "type": "function"
                     },
                     {
-                        "inputs": [
-                            {
-                                "internalType": "uint256",
-                                "name": "num",
-                                "type": "uint256"
-                            }
-                        ],
-                        "name": "getReservationInfo",
-                        "outputs": [
-                            {
-                                "internalType": "address",
-                                "name": "",
-                                "type": "address"
-                            },
-                            {
-                                "internalType": "uint256",
-                                "name": "",
-                                "type": "uint256"
-                            },
-                            {
-                                "internalType": "uint256",
-                                "name": "",
-                                "type": "uint256"
-                            }
-                        ],
-                        "stateMutability": "view",
-                        "type": "function"
-                    },
-                    {
-                        "inputs": [
-                            {
-                                "internalType": "address",
-                                "name": "_user",
-                                "type": "address"
-                            }
-                        ],
-                        "name": "getReservationNumber",
-                        "outputs": [
-                            {
-                                "internalType": "uint256[]",
-                                "name": "",
-                                "type": "uint256[]"
-                            }
-                        ],
-                        "stateMutability": "view",
-                        "type": "function"
-                    },
-                    {
                         "inputs": [],
                         "name": "isRentOwner",
                         "outputs": [
@@ -265,7 +230,7 @@
                         "stateMutability": "view",
                         "type": "function"
                     }
-                ]
+                ];
                 const carShareContract = await new window.web3.eth.Contract(carShareABI, contractAddr);
                 const req = await carShareContract.methods.getCarInfo().call();
                 // req는 값이 여러개임 
@@ -333,7 +298,7 @@
     <body>
         <div class="d-flex justify-content-between p-5">
             <div>
-                <a href="http://localhost:8545/carReservation.html"><img src="http://localhost:8545/image/carLogo.png" style="height: 80px;"></a>
+                <a href="http://localhost:8545/김동원_안세홍.html"><img src="http://localhost:8545/image/carLogo.png" style="height: 80px;"></a>
             </div>
             <div>
                 <div class="card" style="width: 35rem;">
@@ -345,7 +310,7 @@
                     </div>
                 </div>
                 <div align="right", style="margin-top: 0.5rem;">
-                    <button id="loginBtn" type="button" class="btn btn-primary btn-lg">Metamask Refresh</button>
+                    <button id="loginBtn" type="button" class="btn btn-primary btn-lg">Metamask Connect</button>
                 </div>
             </div>
         </div>

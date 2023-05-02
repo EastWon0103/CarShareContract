@@ -26,7 +26,8 @@ Metamask & Remix IDE 배포 방법: https://eloquence-developers.tistory.com/203
 **ContractRegistry.sol**은 CarShare Contract를 관리하는 **Smart Contract** 입니다.
 우선 어떤 파일 내의 ContractRegistry 배포 후 어드레스를 수정해주세요.
 ```javascript
-
+// 아래의 어드레스를 배포환경에 따라 바꿔주세요
+const contractRegisterAddr = "0x4A783fAa4D3d464E5476C9501AD058E1A6b32BF5";
 ```
 #### 2.5 CarShare.sol 배포 이후
 **CarShare.sol**을 배포하고 어드레스를 카피합니다. 해당 어드레스는 메인화면에서 등록할 때 쓰입니다.
