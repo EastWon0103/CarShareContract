@@ -1,6 +1,7 @@
 ## 네트워크 최신기술 프로젝트: 차량 공유 서비스 데모
 사용툴: Vanilla JS / HTML / CSS / Solidity / Ganache / Remix IDE  
 참여자: 김동원 / 안세홍
+<img width="977" alt="스크린샷 2023-05-02 오후 6 20 21" src="https://user-images.githubusercontent.com/63653473/235628843-16b80338-41c0-42e1-bcb5-f961edbdf5e3.png">
 
 ### 1. 프로젝트 기획의도
 차량을 공유하는 서비스를 Smart Contract로 구현하기
@@ -39,4 +40,4 @@ const contractRegisterAddr = "0x4A783fAa4D3d464E5476C9501AD058E1A6b32BF5";
 ```
 #### 2.7 서버 접속
 과제이기 때문에 과제 룰을 따랐습니다. 아래의 URL이 메인화면입니다.  
-메인화면: http://localhost:8080/김동원_안세홍.html
+메인화면: http://localhost:8545/김동원_안세홍.html
